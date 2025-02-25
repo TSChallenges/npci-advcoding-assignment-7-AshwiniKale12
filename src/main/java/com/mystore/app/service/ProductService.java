@@ -2,11 +2,13 @@ package com.mystore.app.service;
 
 import com.mystore.app.entity.Product;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.*;
+
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
+
 
 @Service
 public class ProductService {
@@ -73,16 +75,38 @@ public class ProductService {
         return null;
     }
 
-    // TODO: Method to search products by name
+    // Method to search products by name
+    public Product searchProductByName(String productName) {
+    	for(Product p: products) {
+    		if(p.getName().equalsIgnoreCase(productName)) {
+    			return p;
+    		}
+    	}
+    	return null;
+    }
+    
+    // Method to filter products by category
+    public List<Product> filterProductByCategory(String category) {
+    	return products.stream()
+    			.filter(p->p.getCategory().equalsIgnoreCase(category))
+    			.collect(Collectors.toList());
+    }
 
 
-    // TODO: Method to filter products by category
+    //Method to filter products by price range
+    public List<Product> filterProductByPrice(double minPrice, double maxPrice){
+    	return products.stream()
+    			.filter(p->p.getPrice()>= minPrice && p.getPrice() <= maxPrice).collect(Collectors.toList());
+    }
 
 
-    // TODO: Method to filter products by price range
-
-
-    // TODO: Method to filter products by stock quantity range
+    // Method to filter products by stock quantity range
+    public List<Product> filterProductByStockQuantity(int minStock, int maxStock) {
+        System.out.println("Filtering products with stock quantity between " + minStock + " and " + maxStock);
+        return products.stream()
+                       .filter(p -> p.getStockQuantity() >= minStock && p.getStockQuantity() <= maxStock)
+                       .collect(Collectors.toList());
+    }
 
     
 }
